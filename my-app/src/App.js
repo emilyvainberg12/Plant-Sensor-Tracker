@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
+import Pong from 'react-pong';
+// import sensorData from './sensorData'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1> Welcome to Your Personal Plant Tracker</h1>
+      <p> Choose Plans to Track: </p>
+      <div className='GetSensorData'>
+        <p> Sensor Data: </p>
+        <Pong></Pong>
+        {/* React.render(
+          <Pong/>,
+          document.getElementById('container')
+        ); */}
+        {/* <sensorData></sensorData> */}
+      </div>
     </div>
   );
 }

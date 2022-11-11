@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+		<title>Plant Webpage</title>
+	</head>
+	<style>
+		/* Style The Dropdown Button */
+		.dropbtn {
+		  background-color: lightblue;
+		  color: white;
+		  padding: 16px;
+		  font-size: 16px;
+		  border: none;
+		  cursor: pointer;
+		}
+		
+		/* The container <div> - needed to position the dropdown content */
+		.dropdown {
+		  position: relative;
+		  display: inline-block;
+		}
+		
+		/* Dropdown Content (Hidden by Default) */
+		.dropdown-content {
+		  display: none;
+		  position: absolute;
+		  background-color: #f9f9f9;
+		  min-width: 160px;
+		  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		  z-index: 1;
+		}
+		
+		/* Links inside the dropdown */
+		.dropdown-content a {
+		  color: black;
+		  padding: 12px 16px;
+		  text-decoration: none;
+		  display: block;
+		}
+		
+		/* Change color of dropdown links on hover */
+		.dropdown-content a:hover {background-color: #f1f1f1}
+		
+		/* Show the dropdown menu on hover */
+		.dropdown:hover .dropdown-content {
+		  display: block;
+		}
+		
+		/* Change the background color of the dropdown button when the dropdown content is shown */
+		.dropdown:hover .dropbtn {
+		  background-color: lightblue;
+		}
+		.table, th, td {
+			text-align: center;
+			border: 1px solid;
+			width: 500px;
+			height: 40px;
+		}
+		</style>
+
+	<body>
+		<center>
+		<h1>Plants Dashboard</h1>
+		</center>
+		<br> <br>
+		<caption style="font-weight: bold">Your Plants: </caption>
+		<table id="plants">
+			<tr>
+				<th id="test">Plant Name </th>
+				<th>Recommened Water </th>
+				<th>Recommended Light </th>
+				<!-- <th> Your Sunlight </th> -->
+			</tr>
+		</table>
+
+		<canvas id="mychart0" style="width:100%;max-width:500px; height:300px"></canvas>
+		<br>
+		<br>
+		<canvas id="mychart1" style="width:100%;max-width:500px; height:300px"></canvas>
+		<br>
+		<br>
+		<canvas id="mychart2" style="width:100%;max-width:500px; height:300px"></canvas>
+
+		<script>
+			let sensorValue = 0
+			saved_plants = ["Mint Leaf", "Orchids", "Cactus"]
+			PlantInformation = [["Mint Leaf", "", "", ""],["Orchids", "", "", ""], 
+			["Cactus", "", "", ""], ["Jade", "", "", ""]]
+			for (var i = 0; i < PlantInformation.length; i++){
+				if (saved_plants.includes(PlantInformation[i][0])){
+					var t = "";
+					var tr = "<tr>";
+					tr += "<td>"+PlantInformation[i][0]+"</td>";
+					tr += "<td>"+PlantInformation[i][1]+"</td>";
+					tr += "<td>"+PlantInformation[i][2]+"</td>";
+					// tr += "<td>"+PlantInformation[i][3]+"</td>";
+					tr += "</tr>";
+					t += tr;
+					document.getElementById("plants").innerHTML += t;
+				}
+			}
+			var xValues = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+			var yValues = [27, 49, 44, 24, 15, 33, 07, 28];
+			//REPLACE THIS WITH SENSOR DATA 
+			// xmlhttp.open("POST", SERVERADDRESS, true)
+			// xmlhttp.setRequestHeader("Content-type", "application/json")
+			// xmlhttp.send("")
+			// yValues.append(sensorValue)
+			var barColors = ["red", "green","blue","orange","brown", "pink", "yellow"];
+
+			for (var i = 0; i < saved_plants.length; i++){
+				var currentChart = "mychart" + String(i)
+				console.log(typeof(currentChart))
+				new Chart(currentChart, {
+				type: "bar",
+				data: {
+					labels: xValues,
+					datasets: [{
+						backgroundColor: barColors,
+						data: yValues
+					}]
+					},
+				options: {
+					legend: {display: false},
+					title: {
+						display: true,
+						text: "Light and Moisture Data for Plant: " + String(PlantInformation[i][0])
+					}
+				}
+				});
+			}
+		</script>
+
+		<!-- <svg width="800" height="600"></svg> -->
+	</body>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<script type="application/javascript">
+	const SERVERADDRESS = "http://127.0.0.1:3000"
+	// use XML HTTP request to grab data from the server (central)
+	let xmlhttp = new XMLHttpRequest()
+	var dataset1 = [
+];
+
+	startTime = new Date();
+	xmlhttp.onreadystatechange = function () {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			let responseText = xmlhttp.responseText
+			let sensorValue = parseFloat(JSON.parse(responseText).sensorValue)
+		}
+	}
+	// // periodically grab data
+	// let getData = () => {
+	// 	xmlhttp.open("POST", SERVERADDRESS, true)
+	// 	xmlhttp.setRequestHeader("Content-type", "application/json")
+	// 	xmlhttp.send("")
+	// 	setTimeout(() => {
+	// 		getData()
+	// 	}, 10)
+	// }
+	// getData()
+</script>
+
+</html>
