@@ -3,7 +3,7 @@
 	<head>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-		<title>Plant Webpage</title>
+		<title>Plant Sitter</title>
 	</head>
 	<style>
 		/* Style The Dropdown Button */
@@ -62,7 +62,8 @@
 
 	<body>
 		<center>
-		<h1>Plants Dashboard</h1>
+		<h1>Plant Sitter</h1>
+
 		</center>
 		<br> <br>
 		<caption style="font-weight: bold">Your Plants: </caption>
@@ -71,9 +72,23 @@
 				<th id="test">Plant Name </th>
 				<th>Recommened Water </th>
 				<th>Recommended Light </th>
-				<!-- <th> Your Sunlight </th> -->
+				<th> Next Time to Water </th>
 			</tr>
 		</table>
+		<br> <br>
+		<label for="cars">Add another plant to your tracker</label>
+		<select name="cars" id="cars">
+			<option value="volvo">Mint</option>
+			<option value="saab">Orchid</option>
+			<option value="mercedes">Tomato</option>
+			<option value="audi">Jade</option>
+			<option value="audi">Sunflower</option>
+			<option value="audi">Daisy</option>
+			<option value="audi">Jalapeno</option>
+			<option value="audi">Cactus</option>
+		</select>
+		<button>ADD</button>
+		<br><br>
 
 		<canvas id="mychart0" style="width:100%;max-width:500px; height:300px"></canvas>
 		<br>
@@ -86,8 +101,8 @@
 		<script>
 			let sensorValue = 0
 			saved_plants = ["Mint Leaf", "Orchids", "Cactus"]
-			PlantInformation = [["Mint Leaf", "", "", ""],["Orchids", "", "", ""], 
-			["Cactus", "", "", ""], ["Jade", "", "", ""]]
+			PlantInformation = [["Mint Leaf", "7 day a week", "indoor shade", "Tomorrow"],["Orchids", "1 day a week", "indoor sun", "Friday"], 
+			["Cactus", "2 time a month", "outdoor sun", "Monday 21st"], ["Jade", "7 days a week", "outdoor partly sunny", "Tomorrow"]]
 			for (var i = 0; i < PlantInformation.length; i++){
 				if (saved_plants.includes(PlantInformation[i][0])){
 					var t = "";
@@ -95,20 +110,37 @@
 					tr += "<td>"+PlantInformation[i][0]+"</td>";
 					tr += "<td>"+PlantInformation[i][1]+"</td>";
 					tr += "<td>"+PlantInformation[i][2]+"</td>";
-					// tr += "<td>"+PlantInformation[i][3]+"</td>";
+					tr += "<td>"+PlantInformation[i][3]+"</td>";
 					tr += "</tr>";
 					t += tr;
 					document.getElementById("plants").innerHTML += t;
 				}
 			}
-			var xValues = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-			var yValues = [27, 49, 44, 24, 15, 33, 07, 28];
-			//REPLACE THIS WITH SENSOR DATA 
-			// xmlhttp.open("POST", SERVERADDRESS, true)
-			// xmlhttp.setRequestHeader("Content-type", "application/json")
-			// xmlhttp.send("")
-			// yValues.append(sensorValue)
-			var barColors = ["red", "green","blue","orange","brown", "pink", "yellow"];
+
+			var xValues = ["M- Light", "M- Moisture",  "T- Light", "T- Moisture", "W- Light", "W- Moisture", "Th- Light", "Th- Moisture", "F- Light", "F- Moisture", "Sa- Light", "Sa- Moisture","Su- Light", "Su- Moisture"];
+			var yValues = [];
+			// var yValues = [27, 49, 44, 24, 15, 33, 07, 28, 13, 40, 22, 25, 36, 27, 48];
+			// grab the data from the launch pad to add to the yValues for the results 
+			// each number in the yValues array represents light then moisture for each day 
+			async function load(url) {
+				let obj = null;
+				try {
+					obj = await (await fetch(url)).json();
+				} catch(e) {
+					console.log('error');
+				}
+				console.log(obj);
+			}
+
+			data = load("http://192.168.40.40/ellie");
+
+			function addData(data){
+				console.log(data)
+				for (var x = 0; x < data.length; x++) {
+					yValues.append(data)
+				}
+			}
+			var barColors = ["red", "red", "green", "green","blue", "blue", "orange", "orange","brown", "brown", "pink", "pink", "yellow", "yellow"];
 
 			for (var i = 0; i < saved_plants.length; i++){
 				var currentChart = "mychart" + String(i)
@@ -142,8 +174,6 @@
 	const SERVERADDRESS = "http://127.0.0.1:3000"
 	// use XML HTTP request to grab data from the server (central)
 	let xmlhttp = new XMLHttpRequest()
-	var dataset1 = [
-];
 
 	startTime = new Date();
 	xmlhttp.onreadystatechange = function () {
@@ -152,16 +182,6 @@
 			let sensorValue = parseFloat(JSON.parse(responseText).sensorValue)
 		}
 	}
-	// // periodically grab data
-	// let getData = () => {
-	// 	xmlhttp.open("POST", SERVERADDRESS, true)
-	// 	xmlhttp.setRequestHeader("Content-type", "application/json")
-	// 	xmlhttp.send("")
-	// 	setTimeout(() => {
-	// 		getData()
-	// 	}, 10)
-	// }
-	// getData()
 </script>
 
 </html>
