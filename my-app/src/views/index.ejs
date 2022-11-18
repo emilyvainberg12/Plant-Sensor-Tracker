@@ -76,18 +76,18 @@
 			</tr>
 		</table>
 		<br> <br>
-		<label for="cars">Add another plant to your tracker</label>
-		<select name="cars" id="cars">
-			<option value="volvo">Mint</option>
-			<option value="saab">Orchid</option>
-			<option value="mercedes">Tomato</option>
-			<option value="audi">Jade</option>
-			<option value="audi">Sunflower</option>
-			<option value="audi">Daisy</option>
-			<option value="audi">Jalapeno</option>
-			<option value="audi">Cactus</option>
+		<label for="plants">Add another plant to your tracker</label>
+		<select name="plantSelect" id="plant_select">
+			<option value="Mint">Mint</option>
+			<option value="Orchid">Orchid</option>
+			<option value="Tomato">Tomato</option>
+			<option value="Jade">Jade</option>
+			<option value="Sunflower">Sunflower</option>
+			<option value="Daisy">Daisy</option>
+			<option value="Jalapeno">Jalapeno</option>
+			<option value="Cactus">Cactus</option>
 		</select>
-		<button>ADD</button>
+		<button id="addPlant">ADD</button>
 		<br><br>
 
 		<canvas id="mychart0" style="width:100%;max-width:500px; height:300px"></canvas>
@@ -99,8 +99,9 @@
 		<canvas id="mychart2" style="width:100%;max-width:500px; height:300px"></canvas>
 
 		<script>
-			let sensorValue = 0
-			saved_plants = ["Mint Leaf", "Orchids", "Cactus"]
+			let moisture = 0;
+			let light = 0;
+			let saved_plants = ["Mint Leaf", "Orchids", "Cactus"]
 			PlantInformation = [["Mint Leaf", "7 day a week", "indoor shade", "Tomorrow"],["Orchids", "1 day a week", "indoor sun", "Friday"], 
 			["Cactus", "2 time a month", "outdoor sun", "Monday 21st"], ["Jade", "7 days a week", "outdoor partly sunny", "Tomorrow"]]
 			for (var i = 0; i < PlantInformation.length; i++){
@@ -140,6 +141,16 @@
 					yValues.append(data)
 				}
 			}
+
+			//Update saved_plants upon clicking ADD button
+			let plantBtn = document.getElementById("addPlant");
+			function addPlant() {
+				saved_plants.push(document.getElementById("plantSelect").value)
+				console.log(saved_plants);
+			}
+			plantBtn.addEventListener('click', addPlant);
+		
+
 			var barColors = ["red", "red", "green", "green","blue", "blue", "orange", "orange","brown", "brown", "pink", "pink", "yellow", "yellow"];
 
 			for (var i = 0; i < saved_plants.length; i++){
@@ -179,7 +190,8 @@
 	xmlhttp.onreadystatechange = function () {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			let responseText = xmlhttp.responseText
-			let sensorValue = parseFloat(JSON.parse(responseText).sensorValue)
+			moisture = parseFloat(JSON.parse(responseText).moisture);
+			light = parseFloat(JSON.parse(responseText).light);
 		}
 	}
 </script>
