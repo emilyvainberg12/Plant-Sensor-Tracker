@@ -90,6 +90,7 @@
 		<button id="addPlant">ADD</button>
 		<br><br>
 
+		<div id="charts">
 		<canvas id="mychart0" style="width:100%;max-width:500px; height:300px"></canvas>
 		<br>
 		<br>
@@ -97,6 +98,7 @@
 		<br>
 		<br>
 		<canvas id="mychart2" style="width:100%;max-width:500px; height:300px"></canvas>
+		</div>
 
 		<script>
 			let moisture = 0;
@@ -118,6 +120,31 @@
 				}
 			}
 
+			//Update saved_plants upon clicking ADD button
+			let plantBtn = document.getElementById("addPlant");
+			function addPlant() {
+				saved_plants.push(document.getElementById("plantSelect").value)
+				console.log(saved_plants);
+			}
+			plantBtn.addEventListener('click', addPlant);
+
+			//chartDiv = document.getElementById('charts');
+			//count = 0
+			//newChart = document.createElement('canvas');
+			//newChart.id = 'mychart' + count;
+			//newChart.style='width:100%;max-width:500px; height:300px';
+			//count++;
+			//chartDiv.appendChild(newChart);
+			
+			//plantName = something or other
+			//plantSelect = document.getElementById('plantSelect');
+			//newOption = document.createElement('option');
+			//newOption.value = plantName;
+			//optionText = document.createTextNode(plantName);
+			//newOption.appendChild(optionText);
+			//plantSelect.appendChild(newOption);
+
+
 			var xValues = ["M- Light", "M- Moisture",  "T- Light", "T- Moisture", "W- Light", "W- Moisture", "Th- Light", "Th- Moisture", "F- Light", "F- Moisture", "Sa- Light", "Sa- Moisture","Su- Light", "Su- Moisture"];
 			var yValues = [];
 			// var yValues = [27, 49, 44, 24, 15, 33, 07, 28, 13, 40, 22, 25, 36, 27, 48];
@@ -135,21 +162,26 @@
 
 			data = load("http://192.168.40.40/ellie");
 
+			//moistureData = JSON.parse(data).moisture;
+			//lightData = JSON.parse(data).light;
+			//push or concat based on structure of data
+			//if data is [plant1, plant2, plant3, ...] (yValues as 2d array)
+			//for (var i = 0; i < data.length; i++) {
+			//	yValues[i].push(moistureData[i]);
+			//	yValues[i].push(moistureData[i]);
+			//}
+			//if data is just for one plant
+			//for (var i = 0; i < data.length; i++) {
+			//	yValues.push(moistureData[i]);
+			//	yValues.push(moistureData[i]);
+			//}			
+			
 			function addData(data){
 				console.log(data)
 				for (var x = 0; x < data.length; x++) {
 					yValues.append(data)
 				}
-			}
-
-			//Update saved_plants upon clicking ADD button
-			let plantBtn = document.getElementById("addPlant");
-			function addPlant() {
-				saved_plants.push(document.getElementById("plantSelect").value)
-				console.log(saved_plants);
-			}
-			plantBtn.addEventListener('click', addPlant);
-		
+			}		
 
 			var barColors = ["red", "red", "green", "green","blue", "blue", "orange", "orange","brown", "brown", "pink", "pink", "yellow", "yellow"];
 
