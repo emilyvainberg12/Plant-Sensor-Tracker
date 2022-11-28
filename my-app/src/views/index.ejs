@@ -80,7 +80,7 @@
 		<select name="plantSelect" id="plantSelect">
 			<option value="Mint Leaf">Mint</option>
 			<option value="Orchid">Orchid</option>
-			<option value="Tomato">Tomato</option>
+			<option value="Cactus">Cactus</option>
 		</select>
 		<button id="addPlant">Choose</button>
 		<br><br>
@@ -102,10 +102,10 @@
 			var yValuesLight = [];
 			var yValuesWater = [];
 			PlantInformation = [["Mint Leaf", "7 day a week", "indoor shade", "Tomorrow"],["Orchid", "1 day a week", "indoor sun", "Friday"], 
-			["Cactus", "2 time a month", "outdoor sun", "Monday 21st"], ["Jade", "7 days a week", "outdoor partly sunny", "Tomorrow"]]
+			["Cactus", "2 time a month", "outdoor sun", "Monday 21st"]]
 			// first array is the light values
 			// second array is the moisture values 
-			PlantLineValues = {"Mint Leaf": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Orchid": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Tomato": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]]};
+			PlantLineValues = {"Mint Leaf": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Orchid": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Cactus": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]]};
 	
 			for (var i = 0; i < PlantInformation.length; i++){
 				var t = "";
