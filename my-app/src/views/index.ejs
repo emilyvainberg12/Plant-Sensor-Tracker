@@ -77,7 +77,7 @@
 		</table>
 		<br> <br>
 		<label for="plants">Add another plant to your tracker</label>
-		<select name="plantSelect" id="plant_select">
+		<select name="plantSelect" id="plantSelect">
 			<option value="Mint">Mint</option>
 			<option value="Orchid">Orchid</option>
 			<option value="Tomato">Tomato</option>
@@ -128,26 +128,32 @@
 			}
 			plantBtn.addEventListener('click', addPlant);
 
-			//chartDiv = document.getElementById('charts');
-			//count = 0
-			//newChart = document.createElement('canvas');
-			//newChart.id = 'mychart' + count;
-			//newChart.style='width:100%;max-width:500px; height:300px';
-			//count++;
-			//chartDiv.appendChild(newChart);
+			/*
+			for (var i = 0; i < 3; i++)
+			{
+				let chartDiv = document.getElementById('charts');
+				let count = 0;
+				let newChart = document.createElement('canvas');
+				newChart.id = 'mychart' + count;
+				newChart.style='width:100%;max-width:500px; height:300px';
+				count++;
+				chartDiv.appendChild(newChart);
+			}
+			*/
 			
-			//plantName = something or other
-			//plantSelect = document.getElementById('plantSelect');
-			//newOption = document.createElement('option');
-			//newOption.value = plantName;
-			//optionText = document.createTextNode(plantName);
-			//newOption.appendChild(optionText);
-			//plantSelect.appendChild(newOption);
-
+			/*
+			let plantName = insert plant name here
+			let plantSelect = document.getElementById('plantSelect');
+			let newOption = document.createElement('option');
+			newOption.value = plantName;
+			let optionText = document.createTextNode(plantName);
+			newOption.appendChild(optionText);
+			plantSelect.appendChild(newOption);
+			*/
 
 			var xValues = ["M- Light", "M- Moisture",  "T- Light", "T- Moisture", "W- Light", "W- Moisture", "Th- Light", "Th- Moisture", "F- Light", "F- Moisture", "Sa- Light", "Sa- Moisture","Su- Light", "Su- Moisture"];
 			var yValues = [];
-			// var yValues = [27, 49, 44, 24, 15, 33, 07, 28, 13, 40, 22, 25, 36, 27, 48];
+			//var yValues = [27, 49, 44, 24, 15, 33, 07, 28, 13, 40, 22, 25, 36, 27, 48];
 			// grab the data from the launch pad to add to the yValues for the results 
 			// each number in the yValues array represents light then moisture for each day 
 			async function load(url) {
@@ -168,12 +174,12 @@
 			//if data is [plant1, plant2, plant3, ...] (yValues as 2d array)
 			//for (var i = 0; i < data.length; i++) {
 			//	yValues[i].push(moistureData[i]);
-			//	yValues[i].push(moistureData[i]);
+			//	yValues[i].push(lightData[i]);
 			//}
 			//if data is just for one plant
 			//for (var i = 0; i < data.length; i++) {
 			//	yValues.push(moistureData[i]);
-			//	yValues.push(moistureData[i]);
+			//	yValues.push(lightData[i]);
 			//}			
 			
 			function addData(data){
