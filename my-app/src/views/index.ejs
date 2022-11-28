@@ -166,7 +166,12 @@
 				console.log(obj);
 			}
 
-			data = load("http://192.168.40.40/ellie");
+			fetch("http://192.168.40.40/ellie")
+				.then((response) => response.json())
+				.then((data) => addData(data))
+				.then((data) => console.log(data));
+
+			// data = load("http://192.168.40.40/ellie");
 
 			//moistureData = JSON.parse(data).moisture;
 			//lightData = JSON.parse(data).light;
@@ -183,6 +188,7 @@
 			//}			
 			
 			function addData(data){
+				console.log("here")
 				console.log(data)
 				for (var x = 0; x < data.length; x++) {
 					yValues.append(data)
