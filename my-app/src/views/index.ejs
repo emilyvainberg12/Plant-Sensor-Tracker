@@ -105,7 +105,7 @@
 			["Cactus", "2 time a month", "outdoor sun", "Monday 21st"]]
 			// first array is the light values
 			// second array is the moisture values 
-			PlantLineValues = {"Mint Leaf": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Orchid": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Cactus": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]]};
+			PlantLineValues = {"Mint Leaf": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Orchid": [[300,300,300,300,300,300,300], [8, 8, 8, 8, 8, 8, 8]], "Cactus": [[700,700,700,700,700,700,700], [3, 3, 3, 3, 3, 3, 3]]};
 	
 			for (var i = 0; i < PlantInformation.length; i++){
 				var t = "";
@@ -163,9 +163,7 @@
 				for (var x = 0; x < lightArray.length; x++) {
 					yValuesLight.push(lightArray[x])
 				}
-			}		
-
-			var barColors = ["red", "red", "green", "green","blue", "blue", "orange", "orange","brown", "brown", "pink", "pink", "yellow", "yellow"];
+			}
 
 			function addChart(myPlant){
 				var currentChart1 = "water"
@@ -238,7 +236,6 @@
 					}
 				}
 				});
-				// add bar values for chosen plant 
 			}
 		</script>
 	</body>
