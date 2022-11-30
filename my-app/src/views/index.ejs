@@ -106,6 +106,7 @@
 			let light = 0;
 			var xValuesLight = ["M- Light", "T- Light", "W- Light", "Th- Light","F- Light", "Sa- Light", "Su- Light"];
 			var xValuesWater = ["M- Moisture", "T- Moisture", "W- Moisture",  "Th- Moisture", "F- Moisture", "Sa- Moisture", "Su- Moisture"];
+			var xValuesTime = ["8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"]
 			var yValuesLight = [];
 			var yValuesWater = [];
 			PlantInformation = [["Mint Leaf", "7 day a week", "indoor shade", "Tomorrow"],["Orchid", "1 day a week", "indoor sun", "Friday"], 
@@ -217,7 +218,7 @@
 				lightChart = new Chart(currentChart1, {
 				type: "bar",
 				data: { 
-					labels: xValuesLight,
+					labels: xValuesTime,
 					datasets: [{
 						type: 'bar',
 						backgroundColor: 'orange',
@@ -252,7 +253,7 @@
 				waterChart = new Chart(currentChart2, {
 				type: "bar",
 				data: {
-					labels: xValuesWater,
+					labels: xValuesTime,
 					datasets: [{
 						backgroundColor: 'lightblue',
 						data: yValuesWater
