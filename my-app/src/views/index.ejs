@@ -113,11 +113,13 @@
 		</div>
 
 		<script>
+			let switchDataSet = false; 
+			let firstCount = 0;
 			let moisture = 0;
 			let light = 0;
 			var xValuesLight = ["M- Light", "T- Light", "W- Light", "Th- Light","F- Light", "Sa- Light", "Su- Light"];
 			var xValuesWater = ["M- Moisture", "T- Moisture", "W- Moisture",  "Th- Moisture", "F- Moisture", "Sa- Moisture", "Su- Moisture"];
-			var xValuesTime = ["8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm", "9pm", "10pm", "11pm", "12pm", "1am", "2am", "3am", "4am", "5am", "6am", "7am"]
+			var xValuesTime = ["8am", "10am", "12pm", "2pm", "4pm", "6pm", "8pm",  "10pm", "12am", "2am",  "4am", "6am"];
 			var yValuesLight = [];
 			var yValuesWater = [];
 			PlantInformation = [["Mint Leaf", "7 day a week", "indoor shade", "Tomorrow"],["Orchid", "1 day a week", "indoor sun", "Friday"], 
@@ -142,74 +144,196 @@
 			let plantBtn = document.getElementById("addPlant");
 			let myPlant = ""
 			function addPlant() {
+				let change = false; 
+				var count = 0;
+				myDictionary = [{"moisture": [327, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								"light": [640, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+								"light average": [0, 0, 0, 0, 0, 0, 0], 
+								"water average": [0, 0, 0, 0, 0, 0, 0], 
+								"intense light": 0
+								},
+								{"moisture": [408, 327, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								"light": [638, 640, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+								"light average": [0, 0, 0, 0, 0, 0, 0], 
+								"water average": [0, 0, 0, 0, 0, 0, 0], 
+								"intense light": 0
+								},
+								{"moisture": [415, 408, 327, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								"light": [638, 638, 640, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+								"light average": [638, 0, 0, 0, 0, 0, 0], 
+								"water average": [383, 0, 0, 0, 0, 0, 0], 
+								"intense light": 0
+								},
+								{"moisture": [419, 415, 408, 327, 0, 0, 0, 0, 0, 0, 0, 0],
+								"light": [638, 638, 638, 640, 0, 0, 0, 0, 0, 0, 0, 0], 
+								"light average": [638, 0, 0, 0, 0, 0, 0], 
+								"water average": [383, 0, 0, 0, 0, 0, 0], 
+								"intense light": 0
+								},
+								{"moisture": [422, 419, 415, 408, 327, 0, 0, 0, 0, 0, 0, 0],
+								"light": [638, 638, 638, 638, 640, 0, 0, 0, 0, 0, 0, 0], 
+								"light average": [638, 0, 0, 0, 0, 0, 0], 
+								"water average": [383, 0, 0, 0, 0, 0, 0], 
+								"intense light": 0
+								},
+								{"moisture": [423, 422, 419, 415, 408, 327, 0, 0, 0, 0, 0, 0],
+								"light": [638, 638, 638, 638, 638, 640, 0, 0, 0, 0, 0, 0], 
+								"light average": [638, 638, 0, 0, 0, 0, 0], 
+								"water average": [421, 383, 0, 0, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [428, 423, 422, 419, 415, 408, 327, 0, 0, 0, 0, 0],
+								"light": [637, 638, 638, 638, 638, 638, 640, 0, 0, 0, 0, 0], 
+								"light average": [638, 638, 0, 0, 0, 0, 0], 
+								"water average": [421, 383, 0, 0, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [432, 428, 423, 422, 419, 415, 408, 327, 0, 0, 0, 0],
+								"light": [637, 637, 638, 638, 638, 638, 638, 640, 0, 0, 0, 0], 
+								"light average": [638, 638, 0, 0, 0, 0, 0], 
+								"water average": [421, 383, 0, 0, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [431, 432, 428, 423, 422, 419, 415, 408, 327, 0, 0, 0],
+								"light": [637, 637, 637, 638, 638, 638, 638, 638, 640, 0, 0, 0], 
+								"light average": [637, 638, 638, 0, 0, 0, 0], 
+								"water average": [430, 421, 383, 0, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [435, 431, 432, 428, 423, 422, 419, 415, 408, 327, 0, 0],
+								"light": [637, 637, 637, 637, 638, 638, 638, 638, 638, 640, 0, 0], 
+								"light average": [637, 638, 638, 0, 0, 0, 0], 
+								"water average": [430, 421, 383, 0, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [440, 435, 431, 432, 428, 423, 422, 419, 415, 408, 0, 0],
+								"light": [637, 637, 637, 637, 637, 638, 638, 638, 638, 638, 0, 0], 
+								"light average": [637, 638, 638, 0, 0, 0, 0], 
+								"water average": [430, 421, 383, 0, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [439, 440, 435, 431, 432, 428, 423, 422, 419, 415, 0, 0],
+								"light": [637, 637, 637, 637, 637, 637, 638, 638, 638, 638], 
+								"light average": [637, 637, 638, 638, 0, 0, 0], 
+								"water average": [438, 430, 421, 383, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [443, 439, 440, 435, 431, 432, 428, 423, 422, 419, 0, 0],
+								"light": [637, 637, 637, 637, 637, 637, 637, 638, 638, 638], 
+								"light average": [637, 637, 638, 638, 0, 0, 0], 
+								"water average": [438, 430, 421, 383, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [443, 443, 439, 440, 435, 431, 432, 428, 423, 422, 0, 0],
+								"light": [637, 637, 637, 637, 637, 637, 637, 637, 638, 638], 
+								"light average": [637, 637, 638, 638, 0, 0, 0], 
+								"water average": [438, 430, 421, 383, 0, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [449, 443, 443, 439, 440, 435, 431, 432, 428, 423],
+								"light": [637, 637, 637, 637, 637, 637, 637, 637, 637, 638], 
+								"light average": [637, 637, 637, 638, 638, 0, 0], 
+								"water average": [445, 438, 430, 421, 383, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [443, 449, 443, 443, 439, 440, 435, 431, 432, 428],
+								"light": [637, 637, 637, 637, 637, 637, 637, 637, 637, 637], 
+								"light average": [637, 637, 637, 638, 638, 0, 0], 
+								"water average": [445, 438, 430, 421, 383, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [447, 443, 449, 443, 443, 439, 440, 435, 431, 432],
+								"light": [637, 637, 637, 637, 637, 637, 637, 637, 637, 637], 
+								"light average": [637, 637, 637, 638, 638, 0, 0], 
+								"water average": [445, 438, 430, 421, 383, 0, 0], 
+								"intense light": 1
+								},
+								{"moisture": [446, 447, 443, 449, 443, 443, 439, 440, 435, 431],
+								"light": [637, 637, 637, 637, 637, 637, 637, 637, 637, 637], 
+								"light average": [637, 637, 637, 637, 638, 638, 0], 
+								"water average": [445, 445, 438, 430, 421, 383, 0], 
+								"intense light": 1
+								},
+								{"moisture": [450, 446, 447, 443, 449, 443, 443, 439, 440, 435],
+								"light": [637, 637, 637, 637, 637, 637, 637, 637, 637, 637], 
+								"light average": [637, 637, 637, 637, 638, 638, 0], 
+								"water average": [445, 445, 438, 430, 421, 383, 0], 
+								"intense light": 1
+								},
+								{"moisture": [431, 450, 446, 447, 443, 449, 443, 443, 439, 440],
+								"light": [637, 637, 637, 637, 637, 637, 637, 637, 637, 637], 
+								"light average": [637, 637, 637, 637, 638, 638, 0], 
+								"water average": [445, 445, 438, 430, 421, 383, 0], 
+								"intense light": 1
+								},
+								{"moisture": [436, 431, 450, 446, 447, 443, 449, 443, 443, 439],
+								"light": [553, 637, 637, 637, 637, 637, 637, 637, 637, 637], 
+								"light average": [609, 637, 637, 637, 637, 638, 638], 
+								"water average": [439, 445, 445, 438, 430, 421, 383], 
+								"intense light": 0
+								}, 
+								{"moisture": [435, 436, 431, 450, 446, 447, 443, 449, 443, 443],
+								"light": [637, 553, 637, 637, 637, 637, 637, 637, 637, 637], 
+								"light average": [609, 637, 637, 637, 637, 638, 638], 
+								"water average": [439, 445, 445, 438, 430, 421, 383], 
+								"intense light": 0
+								}]
 				if (timer) {
 					clearInterval(timer);
 				}
 				myPlant = document.getElementById("plantSelect").value
-				addData(null)
+				
+				
+				addData(myDictionary[count])
 				addChart(myPlant)
-				updateChart(); //want to fix the colors but unsure how
+				updateChart(); 
 				timer = setInterval(() => 
 				{
-					addData(null)
-					//addChart(myPlant)
-					console.log('updating');
-					updateChart();
+					count += 1
+					if (count === 10){
+						count = 0
+					}
+					if (count == 7){
+						change = true; 
+					}
+					console.log("COUNT", count)
+					addData(myDictionary[count])
+					updateChart(change);
 				}
-				, 1000); //Repeat every x seconds
+				, 2000); //Repeat every x seconds
 			}
 			plantBtn.addEventListener('click', addPlant);
 
-			async function load(url) {
-				let obj = null;
-				try {
-					obj = await (await fetch(url)).json();
-				} catch(e) {
-					console.log('error');
-				}
-				console.log(obj);
-			}
+			// fetch("http://192.168.40.40/ellie")
+			// 	.then((response) => response.json())
+			// 	.then((data) => addData(data))
+			// 	.then((data) => console.log(data));
 
-			fetch("http://192.168.40.40/ellie")
-				.then((response) => response.json())
-				.then((data) => addData(data))
-				.then((data) => console.log(data));
-
-			// addData(null)	
-			//myDictionary = {'moisture': [5, 6, 4, 8, 9, 5, 5, 5], 'light':[620, 640, 450, 630, 660,610,624,540]}
-			function addData(data){
-				//TODO: replace myDictionary with DATA bc info needs to be recived from launchpad: should be same format  
-				//myDictionary = {'moisture': [5, 6, 4, 8, 9, 5, 5, 5], 'light':[620, 640, 450, 630, 660,610,624,540]}
-				//temp code to test dynamically changing graph
-				/*
-				myDictionary['light'].shift();
-				myDictionary['moisture'].shift();
-				myDictionary['light'].push((Math.random() - 0.5) * PlantLineValues[document.getElementById("plantSelect").value][0][0] * 0.05 + myDictionary['light'][6]);
-				myDictionary['moisture'].push((Math.random() - 0.5) * PlantLineValues[document.getElementById("plantSelect").value][1][0] * 0.05 + myDictionary['moisture'][6]);
-				*/
-				myDictionary = {'moisture': [450, 460, 404, 408, 509, 450, 405, 405], 'light':[620, 640, 450, 630, 660,610,624,540], 'light average': [334,623,476,525,420,500,0], 'moisture average': [401,384,359,138,15,0,0]}																					
+			function addData(myDictionary){																			
+				console.log(myDictionary)
 				moistureArray = myDictionary['moisture']
 				lightArray = myDictionary['light']
-				moistureWeek = myDictionary['moisture average']
+				moistureWeek = myDictionary['water average']
+				console.log("water", moistureWeek)
 				lightWeek = myDictionary['light average']
+				console.log("light", lightWeek)
 				yValuesWater = [];
 				yValuesLight= [];
 				yValuesWaterWeek = [];
 				yValuesLightWeek= [];
 				for (var x = 0; x < moistureArray.length; x++) {
-					console.log(moistureArray[x])
 					yValuesWater.push(moistureArray[x])
 				}
 				for (var x = 0; x < lightArray.length; x++) {
 					yValuesLight.push(lightArray[x])
 				}
 				for (var x = 0; x < moistureWeek.length; x++) {
-					console.log(moistureWeek[x])
 					yValuesWaterWeek.push(moistureWeek[x])
 				}
 				for (var x = 0; x < lightWeek.length; x++) {
 					yValuesLightWeek.push(lightWeek[x])
 				}
+				console.log("WEEK", yValuesLightWeek);
 			}
 
 			var lightChart;
@@ -366,41 +490,50 @@
 				});
 			}
 
-			function updateChart(lightData, waterData) {
+			function updateChart(change,lightData, waterData) {
+				console.log(change)
 				//update data fields of lightChart and waterChart
 				//shift x-axes and y-axes left by one (so last 7 days are displayed)
 				//add new column (day that was replaced)
-				//lightChart.options.title.text = 'test title!';
-				first_day = xValuesTime.shift();
-				xValuesTime.push(first_day);
+				if (change == true){
+					first_day = xValuesTime.shift();
+					console.log("FIRST DAY", first_day)
+					xValuesTime.push(first_day);
+					if (first_day == '6am'){
+						switchDataSet = true;
+					}
+					else{
+						switchDataSet = false;
+					}
+				}
+				else{
+					first_day = xValuesTime[0];
+				}
+				console.log(xValuesTime)
 				lightChart.data.labels = xValuesTime.slice(0, 7);
 				waterChart.data.labels = xValuesTime.slice(0, 7);
-				//lightChart.data.datasets[0].data.shift();
-				//lightChart.data.datasets[0].data.push(lightData);
 				lightChart.data.datasets[0].data = yValuesLight;
 				waterChart.data.datasets[0].data = yValuesWater;
-				//waterChart.data.datasets[0].data.shift();
-				//waterChart.data.datasets[0].data.push(waterData);
 
 				let colors = getBGColors();
 				lightChart.data.datasets[0].backgroundColor = colors.light;
-				waterChart.data.datasets[0].backgroundColor = colors.water;
-				console.log(colors);
-
+				waterChart.data.datasets[0].backgroundColor = colors.water
+				
 				lightChart.update();
 				waterChart.update();
+				WeeklylightChart.update();
+				WeeklywaterChart.update();
 			}
 
 			//This can be a dict of flowers which are dicts structured as {light: 100, water: 100}
 			function getBGColors() {
 				var lightData = lightChart.data.datasets[0].data;
 				var waterData = waterChart.data.datasets[0].data;
-				var percentDiff = 0.6;
+				var percentDiff = 0.4;
 				var colors;
 				colors = {light: [], water: []};
 				var lightLevel = PlantLineValues[myPlant][0][0];
 				var waterLevel = PlantLineValues[myPlant][1][0];
-				console.log('data ' + lightData);
 				for (var i = 0; i < lightData.length; i++) {
 					if (Math.abs(lightData[i] - lightLevel) > lightLevel * percentDiff) {
 						colors.light.push('red');
@@ -417,7 +550,6 @@
 						colors.water.push('lightblue');
 					}
 				}
-				console.log(colors);
 				return colors;
 			}
 
