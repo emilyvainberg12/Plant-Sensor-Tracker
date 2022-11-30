@@ -7,6 +7,14 @@
 	</head>
 	<style>
 		/* Style The Dropdown Button */
+		/*
+		h1 {
+			color: blue;
+		}
+		*/
+		body {
+			background-color: rgb(222, 255, 222);
+		}
 		.dropbtn {
 		  background-color: lightblue;
 		  color: white;
@@ -118,14 +126,26 @@
 				t += tr;
 				document.getElementById("plants").innerHTML += t;
 			}
-
+			var timer = null;
 			//Update saved_plants upon clicking ADD button
 			let plantBtn = document.getElementById("addPlant");
 			let myPlant = ""
 			function addPlant() {
+				if (timer) {
+					clearInterval(timer);
+				}
 				myPlant = document.getElementById("plantSelect").value
 				addData(null)
 				addChart(myPlant)
+				updateChart(); //want to fix the colors but unsure how
+				timer = setInterval(() => 
+				{
+					addData(null)
+					//addChart(myPlant)
+					console.log('updating');
+					updateChart();
+				}
+				, 1000); //Repeat every x seconds
 			}
 			plantBtn.addEventListener('click', addPlant);
 
@@ -145,9 +165,17 @@
 				.then((data) => console.log(data));
 
 			// addData(null)	
-			
+			//myDictionary = {'moisture': [5, 6, 4, 8, 9, 5, 5, 5], 'light':[620, 640, 450, 630, 660,610,624,540]}
 			function addData(data){
 				//TODO: replace myDictionary with DATA bc info needs to be recived from launchpad: should be same format  
+				//myDictionary = {'moisture': [5, 6, 4, 8, 9, 5, 5, 5], 'light':[620, 640, 450, 630, 660,610,624,540]}
+				//temp code to test dynamically changing graph
+				/*
+				myDictionary['light'].shift();
+				myDictionary['moisture'].shift();
+				myDictionary['light'].push((Math.random() - 0.5) * PlantLineValues[document.getElementById("plantSelect").value][0][0] * 0.05 + myDictionary['light'][6]);
+				myDictionary['moisture'].push((Math.random() - 0.5) * PlantLineValues[document.getElementById("plantSelect").value][1][0] * 0.05 + myDictionary['moisture'][6]);
+				*/
 				myDictionary = {'moisture': [5, 6, 4, 8, 9, 5, 5, 5], 'light':[620, 640, 450, 630, 660,610,624,540]}
 				console.log("here")
 				// console.log(data)
@@ -156,6 +184,8 @@
 				console.log(yValuesWater)
 				console.log(moistureArray)
 				console.log(lightArray)
+				yValuesWater = [];
+				yValuesLight = [];
 				for (var x = 0; x < moistureArray.length; x++) {
 					console.log(moistureArray[x])
 					yValuesWater.push(moistureArray[x])
@@ -165,10 +195,19 @@
 				}
 			}
 
+			var lightChart;
+			var waterChart;
+
 			function addChart(myPlant){
+				if (lightChart) {
+					lightChart.destroy();
+				}
+				if (waterChart) {
+					waterChart.destroy();
+				}
 				var currentChart1 = "water"
 				var currentChart2 = "light"
-				new Chart(currentChart1, {
+				lightChart = new Chart(currentChart1, {
 				type: "bar",
 				data: { 
 					labels: xValuesLight,
@@ -202,7 +241,7 @@
 					}
 				}
 				});
-				new Chart(currentChart2, {
+				waterChart = new Chart(currentChart2, {
 				type: "bar",
 				data: {
 					labels: xValuesWater,
@@ -237,6 +276,63 @@
 				}
 				});
 			}
+
+			function updateChart(lightData, waterData) {
+				//update data fields of lightChart and waterChart
+				//shift x-axes and y-axes left by one (so last 7 days are displayed)
+				//add new column (day that was replaced)
+				//lightChart.options.title.text = 'test title!';
+				first_day = lightChart.data.labels.shift();
+				lightChart.data.labels.push(first_day);
+				lightChart.data.datasets[0].data = yValuesLight;
+				//lightChart.data.datasets[0].data.shift();
+				//lightChart.data.datasets[0].data.push(lightData);
+
+				first_day = waterChart.data.labels.shift();
+				waterChart.data.labels.push(first_day);
+				waterChart.data.datasets[0].data = yValuesWater;
+				//waterChart.data.datasets[0].data.shift();
+				//waterChart.data.datasets[0].data.push(waterData);
+
+				let colors = getBGColors();
+				lightChart.data.datasets[0].backgroundColor = colors.light;
+				waterChart.data.datasets[0].backgroundColor = colors.water;
+				console.log(colors);
+
+				lightChart.update();
+				waterChart.update();
+			}
+
+			//This can be a dict of flowers which are dicts structured as {light: 100, water: 100}
+			function getBGColors() {
+				var lightData = lightChart.data.datasets[0].data;
+				var waterData = waterChart.data.datasets[0].data;
+				var percentDiff = 0.6;
+				var colors;
+				colors = {light: [], water: []};
+				var lightLevel = PlantLineValues[document.getElementById("plantSelect").value][0][0];
+				var waterLevel = PlantLineValues[document.getElementById("plantSelect").value][1][0];
+				console.log('data ' + lightData);
+				for (var i = 0; i < lightData.length; i++) {
+					if (Math.abs(lightData[i] - lightLevel) > lightLevel * percentDiff) {
+						colors.light.push('red');
+					}
+					else {
+						colors.light.push('orange');
+					}
+				}
+				for (var i = 0; i < waterData.length; i++) {
+					if (Math.abs(waterData[i] - waterLevel) > waterLevel * percentDiff) {
+						colors.water.push('red');
+					}
+					else {
+						colors.water.push('lightblue');
+					}
+				}
+				console.log(colors);
+				return colors;
+			}
+
 		</script>
 	</body>
 
