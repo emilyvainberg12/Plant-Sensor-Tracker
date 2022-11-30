@@ -23,7 +23,13 @@
 		  border: none;
 		  cursor: pointer;
 		}
-		
+
+
+		.container {
+			display: grid;
+			grid-template-rows: 350px 350px;
+			grid-template-columns: 550px 550px;
+		}
 		/* The container <div> - needed to position the dropdown content */
 		.dropdown {
 		  position: relative;
@@ -91,14 +97,19 @@
 		</select>
 		<button id="addPlant">Choose</button>
 		<br><br>
-		<div id="charts">
-		<canvas id="water" style="width:100%;max-width:500px; height:300px"></canvas>
-		<br>
-		<canvas id="light" style="width:100%;max-width:500px; height:300px"></canvas>
-		<br>
-		<canvas id="waterWeek" style="width:100%;max-width:500px; height:300px"></canvas>
-		<br>
-		<canvas id="lightWeek" style="width:100%;max-width:500px; height:300px"></canvas>
+		<div id="charts" class="container">
+			<div id="chart a">
+				<canvas id="water" style="width:100%;max-width:500px; height:300px"></canvas>
+			</div>
+			<div id="chart b">		
+				<canvas id="light" style="width:100%;max-width:500px; height:300px"></canvas>
+			</div>
+			<div id="chart c">
+				<canvas id="waterWeek" style="width:100%;max-width:500px; height:300px"></canvas>
+			</div>
+			<div id="chart d">
+				<canvas id="lightWeek" style="width:100%;max-width:500px; height:300px"></canvas>
+			</div>
 		</div>
 
 		<script>
@@ -106,7 +117,7 @@
 			let light = 0;
 			var xValuesLight = ["M- Light", "T- Light", "W- Light", "Th- Light","F- Light", "Sa- Light", "Su- Light"];
 			var xValuesWater = ["M- Moisture", "T- Moisture", "W- Moisture",  "Th- Moisture", "F- Moisture", "Sa- Moisture", "Su- Moisture"];
-			var xValuesTime = ["8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm"]
+			var xValuesTime = ["8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm", "9pm", "10pm", "11pm", "12pm", "1am", "2am", "3am", "4am", "5am", "6am", "7am"]
 			var yValuesLight = [];
 			var yValuesWater = [];
 			PlantInformation = [["Mint Leaf", "7 day a week", "indoor shade", "Tomorrow"],["Orchid", "1 day a week", "indoor sun", "Friday"], 
@@ -218,7 +229,7 @@
 				lightChart = new Chart(currentChart1, {
 				type: "bar",
 				data: { 
-					labels: xValuesTime,
+					labels: xValuesTime.slice(0, 7),
 					datasets: [{
 						type: 'bar',
 						backgroundColor: 'orange',
@@ -253,7 +264,7 @@
 				waterChart = new Chart(currentChart2, {
 				type: "bar",
 				data: {
-					labels: xValuesTime,
+					labels: xValuesTime.slice(0, 7),
 					datasets: [{
 						backgroundColor: 'lightblue',
 						data: yValuesWater
@@ -360,14 +371,13 @@
 				//shift x-axes and y-axes left by one (so last 7 days are displayed)
 				//add new column (day that was replaced)
 				//lightChart.options.title.text = 'test title!';
-				first_day = lightChart.data.labels.shift();
-				lightChart.data.labels.push(first_day);
-				lightChart.data.datasets[0].data = yValuesLight;
+				first_day = xValuesTime.shift();
+				xValuesTime.push(first_day);
+				lightChart.data.labels = xValuesTime.slice(0, 7);
+				waterChart.data.labels = xValuesTime.slice(0, 7);
 				//lightChart.data.datasets[0].data.shift();
 				//lightChart.data.datasets[0].data.push(lightData);
-
-				first_day = waterChart.data.labels.shift();
-				waterChart.data.labels.push(first_day);
+				lightChart.data.datasets[0].data = yValuesLight;
 				waterChart.data.datasets[0].data = yValuesWater;
 				//waterChart.data.datasets[0].data.shift();
 				//waterChart.data.datasets[0].data.push(waterData);
@@ -388,8 +398,8 @@
 				var percentDiff = 0.6;
 				var colors;
 				colors = {light: [], water: []};
-				var lightLevel = PlantLineValues[document.getElementById("plantSelect").value][0][0];
-				var waterLevel = PlantLineValues[document.getElementById("plantSelect").value][1][0];
+				var lightLevel = PlantLineValues[myPlant][0][0];
+				var waterLevel = PlantLineValues[myPlant][1][0];
 				console.log('data ' + lightData);
 				for (var i = 0; i < lightData.length; i++) {
 					if (Math.abs(lightData[i] - lightLevel) > lightLevel * percentDiff) {
