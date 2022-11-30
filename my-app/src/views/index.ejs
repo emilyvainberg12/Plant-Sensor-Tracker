@@ -80,7 +80,6 @@
 				<th id="test">Plant Name </th>
 				<th>Recommened Water </th>
 				<th>Recommended Light </th>
-				<!-- <th> Next Time to Water </th> -->
 			</tr>
 		</table>
 		<br> <br>
@@ -92,14 +91,14 @@
 		</select>
 		<button id="addPlant">Choose</button>
 		<br><br>
-
 		<div id="charts">
 		<canvas id="water" style="width:100%;max-width:500px; height:300px"></canvas>
 		<br>
-		<br>
 		<canvas id="light" style="width:100%;max-width:500px; height:300px"></canvas>
 		<br>
+		<canvas id="waterWeek" style="width:100%;max-width:500px; height:300px"></canvas>
 		<br>
+		<canvas id="lightWeek" style="width:100%;max-width:500px; height:300px"></canvas>
 		</div>
 
 		<script>
@@ -113,7 +112,7 @@
 			["Cactus", "2 time a month", "outdoor sun", "Monday 21st"]]
 			// first array is the light values
 			// second array is the moisture values 
-			PlantLineValues = {"Mint Leaf": [[400,400,400,400,400,400,400], [5, 5, 5, 5, 5, 5, 5]], "Orchid": [[300,300,300,300,300,300,300], [8, 8, 8, 8, 8, 8, 8]], "Cactus": [[700,700,700,700,700,700,700], [3, 3, 3, 3, 3, 3, 3]]};
+			PlantLineValues = {"Mint Leaf": [[400,400,400,400,400,400,400], [400,400,400,400,400,400,400]], "Orchid": [[300,300,300,300,300,300,300], [400,400,400,400,400,400,400]], "Cactus": [[700,700,700,700,700,700,700], [250,250,250,250,250,250,250]]};
 	
 			for (var i = 0; i < PlantInformation.length; i++){
 				var t = "";
@@ -176,22 +175,28 @@
 				myDictionary['light'].push((Math.random() - 0.5) * PlantLineValues[document.getElementById("plantSelect").value][0][0] * 0.05 + myDictionary['light'][6]);
 				myDictionary['moisture'].push((Math.random() - 0.5) * PlantLineValues[document.getElementById("plantSelect").value][1][0] * 0.05 + myDictionary['moisture'][6]);
 				*/
-				myDictionary = {'moisture': [5, 6, 4, 8, 9, 5, 5, 5], 'light':[620, 640, 450, 630, 660,610,624,540]}
-				console.log("here")
-				// console.log(data)
+				myDictionary = {'moisture': [5, 6, 4, 8, 9, 5, 5, 5], 'light':[620, 640, 450, 630, 660,610,624,540], 'light average': [334,623,476,525,420,500,0], 'moisture average': [401,384,359,138,15,0,0]}																					
 				moistureArray = myDictionary['moisture']
 				lightArray = myDictionary['light']
-				console.log(yValuesWater)
-				console.log(moistureArray)
-				console.log(lightArray)
+				moistureWeek = myDictionary['moisture average']
+				lightWeek = myDictionary['light average']
 				yValuesWater = [];
-				yValuesLight = [];
+				yValuesLight= [];
+				yValuesWaterWeek = [];
+				yValuesLightWeek= [];
 				for (var x = 0; x < moistureArray.length; x++) {
 					console.log(moistureArray[x])
 					yValuesWater.push(moistureArray[x])
 				}
 				for (var x = 0; x < lightArray.length; x++) {
 					yValuesLight.push(lightArray[x])
+				}
+				for (var x = 0; x < moistureWeek.length; x++) {
+					console.log(moistureWeek[x])
+					yValuesWaterWeek.push(moistureWeek[x])
+				}
+				for (var x = 0; x < lightWeek.length; x++) {
+					yValuesLightWeek.push(lightWeek[x])
 				}
 			}
 
@@ -207,6 +212,8 @@
 				}
 				var currentChart1 = "water"
 				var currentChart2 = "light"
+				var currentChart3 = "waterWeek"
+				var currentChart4 = "lightWeek"
 				lightChart = new Chart(currentChart1, {
 				type: "bar",
 				data: { 
@@ -234,13 +241,14 @@
 					},
 					title: {
 						display: true,
-						text: "Light Data for Plant: " + myPlant
+						text: "Daily Light Data for Plant: " + myPlant
 					},
 					chartArea: {
 						backgroundColor: 'rgb(75, 192, 192)',
 					}
 				}
 				});
+
 				waterChart = new Chart(currentChart2, {
 				type: "bar",
 				data: {
@@ -268,7 +276,76 @@
 					},
 					title: {
 						display: true,
-						text: "Moisture Data for Plant: " + myPlant
+						text: "Daily Moisture Data for Plant: " + myPlant
+					},
+					chartArea: {
+						backgroundColor: 'rgb(75, 192, 192)',
+					}
+				}
+				});
+
+				WeeklylightChart = new Chart(currentChart3, {
+				type: "bar",
+				data: { 
+					labels: xValuesLight,
+					datasets: [{
+						type: 'bar',
+						backgroundColor: 'orange',
+						data: yValuesLightWeek
+					},{
+						type: 'line',
+						data : PlantLineValues[myPlant][0],
+						borderColor: 'lightgreen',
+						fill: false
+					},
+					]
+					},
+				options: {
+					legend: {display: false},
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					},
+					title: {
+						display: true,
+						text: "Weekly Light Data for Plant: " + myPlant
+					},
+					chartArea: {
+						backgroundColor: 'rgb(75, 192, 192)',
+					}
+				}
+				});
+				WeeklywaterChart = new Chart(currentChart4, {
+				type: "bar",
+				data: {
+					labels: xValuesWater,
+					datasets: [{
+						backgroundColor: 'lightblue',
+						data: yValuesWaterWeek
+					},
+					{
+						type: 'line',
+						data : PlantLineValues[myPlant][1],
+						borderColor: 'lightgreen',
+						fill: false
+					},
+					]
+					},
+				options: {
+					legend: {display: false},
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					},
+					title: {
+						display: true,
+						text: "Weekly Moisture Data for Plant: " + myPlant
 					},
 					chartArea: {
 						backgroundColor: 'rgb(75, 192, 192)',
